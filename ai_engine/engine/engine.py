@@ -31,7 +31,7 @@ def startup_engine(event: dict) -> int:
     
     InternalLogger.LogDebug('Training model')
     
-    price = train_model(resolved_data)
+    price = train_model(resolved_data, seed_data)
     
     InternalLogger.LogDebug('Getting most related')
     
