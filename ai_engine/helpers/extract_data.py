@@ -2,7 +2,6 @@ import ast
 import json
 import os
 from typing import List
-from ai_engine.dynamo_db.dynamo_db import update_task_status
 from ai_engine.logging.logger import InternalLogger
 from ai_engine.seed_data.puller import SeedDataPuller
 from ai_engine.seed_data.s3_data_puller import S3DataPuller
@@ -22,7 +21,6 @@ def _process_record(record: dict) -> None:
     sns = record.get('Sns', {})
     message = sns.get('Message')
     task_id = _extract_task_id(message)
-    update_task_status(task_id=task_id, status='ANALYZING')
 
     if not task_id:
         InternalLogger.LogError('No task_id found in the message')

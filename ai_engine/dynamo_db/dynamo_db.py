@@ -3,7 +3,7 @@ import boto3
 
 TASKS_TABLE_NAME = os.getenv("TASK_TABLE_NAME", "")
 
-def update_task_status(task_id: str, status: str, stats: dict = {}):
+def update_task_status(task_id: str, status: str):
     dynamodb = boto3.client('dynamodb')
     dynamodb.update_item(
         TableName=TASKS_TABLE_NAME,
@@ -12,21 +12,25 @@ def update_task_status(task_id: str, status: str, stats: dict = {}):
                 'S': task_id
             }
         },
-        UpdateExpression="set #status = :status, #processed = :processed, #recommended_price = :price",
+        UpdateExpression="set #status = :status",
         ExpressionAttributeNames={
             "#status": "status",
-            "#processed": "processed",
-            "#recommended_price": "recommended_price"
         },
         ExpressionAttributeValues={
             ":status": {
                 'S': status
-            },
-            ":processed": {
-                'N': str(stats.get('processed', 0))
-            },
-            ":price": {
-                'N': str(stats.get('price', 0))
             }
         }
     )
+
+def get_task_seed_data(task_id: str) -> dict:
+    dynamodb = boto3.client('dynamodb')
+    response = dynamodb.get_item(
+        TableName=TASKS_TABLE_NAME,
+        Key={
+            'task_id': {
+                'S': task_id
+            }
+        }
+    )
+    return response.get('Item', {}).get('seed_data', {}).get('S', {})

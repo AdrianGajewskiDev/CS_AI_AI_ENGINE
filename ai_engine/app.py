@@ -5,4 +5,4 @@ sample_event = {'Records': [{'EventSource': 'aws:sns', 'EventVersion': '1.0', 'E
 
 
 def handler(event: dict, context):
-    return startup_engine(event)
+    return startup_engine(sample_event)

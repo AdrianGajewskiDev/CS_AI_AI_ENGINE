@@ -3,23 +3,49 @@ import json
 import os
 from typing import List
 
-from ai_engine.dynamo_db.dynamo_db import update_task_status
+from ai_engine.dynamo_db.dynamo_db import get_task_seed_data, update_task_status
 from ai_engine.helpers.extract_data import extract_data_from_event
 from ai_engine.logging.logger import InternalLogger
 from ai_engine.model.model import train_model
-from ai_engine.seed_data.puller import SeedDataPuller
-from ai_engine.seed_data.s3_data_puller import S3DataPuller
+from ai_engine.related.get_most_related import get_most_related
+from ai_engine.s3.s3 import upload_recommendation_results
+from ai_engine.utils.combine_results import combine_results
 
 RESOLVERS = os.getenv('RESOLVER_NAMES')
 
 def startup_engine(event: dict) -> int:
-    task_id, seed_data = extract_data_from_event(event)
+    InternalLogger.LogDebug('Starting engine')
 
-    if not seed_data:
-        InternalLogger.LogInfo('No seed data found')
-        
-    price, stats = train_model(seed_data)
+    task_id, resolved_data = extract_data_from_event(event)
+
+    if not resolved_data:
+        InternalLogger.LogDebug('No seed data found')
+        update_task_status(task_id=task_id, status='NOT_ENOUGH_DATA')
+        return -1
     
-    update_task_status(task_id=task_id, status='COMPLETED', stats={'processed': stats, 'price': price})
+    update_task_status(task_id=task_id, status='ANALYZING')
 
+    InternalLogger.LogDebug('Getting seed data')
+
+    seed_data = get_task_seed_data(task_id)
+    
+    InternalLogger.LogDebug('Training model')
+    
+    price = train_model(resolved_data)
+    
+    InternalLogger.LogDebug('Getting most related')
+    
+    most_related = get_most_related(resolved_data, seed_data)
+    
+    InternalLogger.LogDebug('Combining results')
+    
+    result = combine_results(price, most_related)
+    
+    InternalLogger.LogDebug('Uploading results')
+    
+    upload_recommendation_results(json.dumps(result), task_id)
+
+    InternalLogger.LogDebug('Updating task status')
+
+    update_task_status(task_id=task_id, status='COMPLETED')
     return 0
