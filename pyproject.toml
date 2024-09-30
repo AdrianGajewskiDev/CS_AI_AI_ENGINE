@@ -10,11 +10,6 @@ packages = [{include = "ai_engine"}]
 python = "^3.12"
 pydantic = "^1.5.1"
 requests = "2.32.3"
-numpy = "2.1.1"
-pandas = "2.2.2"
-matplotlib = "3.9.2"
-seaborn = "0.13.2"
-scikit-learn = "1.5.1"
 
 [tool.poetry.dev-dependencies]
 black = "^23.1.0"
