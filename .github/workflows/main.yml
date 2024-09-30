@@ -1,4 +1,4 @@
-name: Deploy to AWS S3
+name: Build docker image and push to ECR
 on:
   push:
     branches:
