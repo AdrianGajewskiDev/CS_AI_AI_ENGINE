@@ -15,23 +15,20 @@ jobs:
       - name: Select Python version
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12' 
-
-      - name: Build
-        run: ./build.sh
-
+          python-version: '3.12'
+          
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-central-1
-    
+          
+      - name: Build docker image
+        run: docker build . --platform=linux/arm64 -t ${{ secrets.AI_ENGINE_ECR }}:latest
+
       - name: Print Working directory
         run: pwd
 
-      - name: List files
-        run: ls -a
-      
-      - name: Deploying to s3
-        run: aws s3 cp cr-ai-ai-engine-dev.zip s3://${{ secrets.LAMBDAS_BUCKET }}/cr-ai-ai-engine-dev.zip
+      - name: Push image to ECR
+        run: docker push ${{ secrets.AI_ENGINE_ECR }}:latest
