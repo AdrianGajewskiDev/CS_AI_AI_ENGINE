@@ -3,8 +3,6 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from ai_engine.models.response_models import PriceRecommendationResponse
-import numpy as np
-from sklearn import preprocessing
 
 data = {
    "task_id":"c251d03e-5457-4d5b-8002-52ec9eb62942",
