@@ -30,5 +30,8 @@ jobs:
       - name: Print Working directory
         run: pwd
 
+      - name: Getting AWS Token
+        run: aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 288761749700.dkr.ecr.eu-central-1.amazonaws.com
+
       - name: Push image to ECR
         run: docker push ${{ secrets.AI_ENGINE_ECR }}:latest
