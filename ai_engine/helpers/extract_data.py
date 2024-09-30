@@ -8,10 +8,11 @@ from ai_engine.seed_data.s3_data_puller import S3DataPuller
 
 RESOLVERS = os.getenv('RESOLVER_NAMES')
 
-def extract_data_from_event(event: dict) -> int:
+def extract_data_from_event(event: dict):
     records = event.get('Records')
     if not records:
         InternalLogger.LogError('No records found in the event')
+        return None, None
     
     # sns always sends a single record
     return _process_record(records[0])
