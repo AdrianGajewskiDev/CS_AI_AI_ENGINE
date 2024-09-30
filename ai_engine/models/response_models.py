@@ -8,7 +8,7 @@ class PriceRecommendationResponse(BaseModel):
     RecommendedPrice: float
     RecommendedPriceCurrency: str
     RecommendedPriceLowest: float
-    RecommeneddPriceHighest: float
+    RecommendedPriceHighest: float
     ProcessedAds: int
 
 class RelatedAdsResponse(BaseModel):

@@ -4182,7 +4182,7 @@ predict_data = {
 
 
 def train_model(resolved_data: List[dict], seed_data: dict) -> PriceRecommendationResponse:
-   return PriceRecommendationResponse(RecommendedPrice=10000, Currency="PLN", RecommendedPriceLowest=7000, RecommendedPriceHighest=15000, ProcessedAds=416)
+   return PriceRecommendationResponse(RecommendedPrice=10000, RecommendedPriceCurrency="PLN", RecommendedPriceLowest=7000, RecommendedPriceHighest=15000, ProcessedAds=416)
    # copy, data_frame = transform_data(seed_data, return_copy=True)
    # X, y = data_frame.drop('Price', axis=1), data_frame['Price']
    # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
