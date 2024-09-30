@@ -25,7 +25,7 @@ jobs:
           aws-region: eu-central-1
           
       - name: Build docker image
-        run: docker build . --platform=linux/arm64 -t ${{ secrets.AI_ENGINE_ECR }}:latest
+        run: docker build .  -t ${{ secrets.AI_ENGINE_ECR }}:latest
 
       - name: Print Working directory
         run: pwd
