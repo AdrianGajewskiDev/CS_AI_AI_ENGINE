@@ -1,4 +1,5 @@
 import json
+import math
 from typing import List
 from ai_engine.logging.logger import InternalLogger
 from ai_engine.models.response_models import RelatedAdsResponse
@@ -593,8 +594,8 @@ def get_most_related(resolved_data: List[dict], seed_data: dict) -> RelatedAdsRe
     sorted_by_mileage = resolved_data
 
     _pre_sorted_by_production_year: list = []
-
-    closest_by_production_year_required = 100
+    total_ads = len(sorted_by_mileage)
+    closest_by_production_year_required = get_portion_length(total_ads) 
     while len(_pre_sorted_by_production_year) < closest_by_production_year_required:
         closest = get_closest_production_year_item(sorted_by_mileage, seed_data)
         _pre_sorted_by_production_year.append(closest)
@@ -602,7 +603,7 @@ def get_most_related(resolved_data: List[dict], seed_data: dict) -> RelatedAdsRe
 
     _pre_sorted_by_mileage: list = []
 
-    closest_by_mileage_required = 30
+    closest_by_mileage_required = get_portion_length(len(_pre_sorted_by_production_year)) 
     while len(_pre_sorted_by_mileage) < closest_by_mileage_required:
         closest = get_closest_mileage_item(_pre_sorted_by_production_year, seed_data)
         _pre_sorted_by_mileage.append(closest)
@@ -629,3 +630,6 @@ def build_ad_item(item: dict) -> AdItem:
         AdvertisementLink=item["AdvertisementLink"],
         Thumbnails=item["Thumbnails"]
     )
+
+def get_portion_length(total_ads: int) -> int:
+    return math.ceil(total_ads * 0.3)
