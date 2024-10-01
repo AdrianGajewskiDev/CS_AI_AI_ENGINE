@@ -1,3 +1,4 @@
+import json
 import os
 import boto3
 
@@ -33,4 +34,4 @@ def get_task_seed_data(task_id: str) -> dict:
             }
         }
     )
-    return response.get('Item', {}).get('seed_data', {}).get('S', {})
+    return json.loads(response.get('Item', {}).get('seed_data', {}).get('S', {}))

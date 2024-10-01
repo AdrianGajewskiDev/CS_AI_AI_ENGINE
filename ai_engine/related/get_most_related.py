@@ -1,5 +1,6 @@
 import json
 from typing import List
+from ai_engine.logging.logger import InternalLogger
 from ai_engine.models.response_models import RelatedAdsResponse
 from ai_engine.models.shared import AdItem
 
@@ -585,6 +586,10 @@ test_seed_data = {"Make": "Audi", "Model": "A3", "Generation": "8V", "Production
 
 
 def get_most_related(resolved_data: List[dict], seed_data: dict) -> RelatedAdsResponse:
+    InternalLogger.LogDebug(f"resolved_data {resolved_data}")
+    InternalLogger.LogDebug(f"seed_data {seed_data}")
+    InternalLogger.LogDebug(f"type of seed_data: {type(resolved_data)}")
+    InternalLogger.LogDebug(f"type seed_data {type(seed_data)}")
     sorted_by_mileage = resolved_data
 
     _pre_sorted_by_production_year: list = []
@@ -603,7 +608,7 @@ def get_most_related(resolved_data: List[dict], seed_data: dict) -> RelatedAdsRe
         _pre_sorted_by_mileage.append(closest)
         _pre_sorted_by_production_year.remove(closest)
 
-    return RelatedAdsResponse(related_ads=[build_ad_item(item) for item in _pre_sorted_by_mileage] )
+    return RelatedAdsResponse(RelatedAds=[build_ad_item(item) for item in _pre_sorted_by_mileage] )
 
 def get_closest_mileage_item(resolved_data: List[dict], seed_data: dict) -> dict:
     return min(resolved_data, key=lambda x: abs(int(x["Mileage"]) - seed_data["Mileage"]))
