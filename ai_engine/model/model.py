@@ -4214,6 +4214,7 @@ def drop_not_needed(df: pd.DataFrame, drop_y: bool = False) -> pd.DataFrame:
    for column in columns_to_drop:
       if column not in df.columns:
          continue
+      InternalLogger.LogDebug(f"Dropping column: {column}")
       df = df.drop(column, axis=1)
    return df
 
