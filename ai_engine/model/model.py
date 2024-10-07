@@ -4218,14 +4218,13 @@ def pre_process(df: pd.DataFrame) -> pd.DataFrame:
 
    return df
 
-def transform_data(seed_data: List[dict], return_copy: bool = False) -> pd.DataFrame:
+def transform_data(seed_data: List[dict]) -> pd.DataFrame:
    data_frame = pd.DataFrame(seed_data)
-   copy = data_frame.copy()
    data_frame = drop_not_needed(data_frame)
    data_frame = convert_to_numeric(data_frame)
    data_frame = pre_process(data_frame)
    
-   return data_frame if not return_copy else copy, data_frame
+   return data_frame
 
 def _fill_missing_features(data: pd.DataFrame, data_frame: pd.DataFrame) -> pd.DataFrame:
    _data = data[0]
