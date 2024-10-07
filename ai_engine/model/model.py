@@ -4182,12 +4182,12 @@ predict_data = {
 
 
 def train_model(resolved_data: List[dict], seed_data: dict) -> PriceRecommendationResponse:
-   copy, data_frame = transform_data(resolved_data, return_copy=True)
+   data_frame = transform_data(resolved_data, return_copy=False)
    X, y = data_frame.drop('Price', axis=1), data_frame['Price']
    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
    req = LinearRegression()
    req.fit(X_train, y_train)
-   prediction_data = _fill_missing_features(transform_data([seed_data]), pd.get_dummies(data_frame), copy)
+   prediction_data = _fill_missing_features(transform_data([seed_data]), pd.get_dummies(data_frame))
    prediction = req.predict(prediction_data)
    return PriceRecommendationResponse(RecommendedPrice=prediction[0], RecommendedPriceCurrency="PLN", RecommendedPriceLowest=7000, RecommendedPriceHighest=15000, ProcessedAds=len(resolved_data))
 
@@ -4208,7 +4208,7 @@ def drop_not_needed(df: pd.DataFrame) -> pd.DataFrame:
    for column in columns_to_drop:
       if column not in df.columns:
          continue
-      df[column] = df.drop(column, axis=1)
+      df = df.drop(column, axis=1)
    return df
 
 def pre_process(df: pd.DataFrame) -> pd.DataFrame:
@@ -4227,7 +4227,7 @@ def transform_data(seed_data: List[dict], return_copy: bool = False) -> pd.DataF
    
    return data_frame if not return_copy else copy, data_frame
 
-def _fill_missing_features(data: pd.DataFrame, data_frame: pd.DataFrame, original_data_frame: pd.DataFrame) -> pd.DataFrame:
+def _fill_missing_features(data: pd.DataFrame, data_frame: pd.DataFrame) -> pd.DataFrame:
    _data = data[0]
    missing_features = set(data_frame.columns) - set(_data.columns)
    for feature in missing_features:
