@@ -4182,7 +4182,7 @@ predict_data = {
 
 
 def train_model(resolved_data: List[dict], seed_data: dict) -> PriceRecommendationResponse:
-   data_frame = transform_data(resolved_data, return_copy=False)
+   data_frame = transform_data(resolved_data)
    X, y = data_frame.drop('Price', axis=1), data_frame['Price']
    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
    req = LinearRegression()
@@ -4232,16 +4232,3 @@ def _fill_missing_features(data: pd.DataFrame, data_frame: pd.DataFrame) -> pd.D
    for feature in missing_features:
       _data[feature] = 0
    return _data
-
-# train_model(data['content'])
-
-# {
-#    "Price":"66500",
-#    "PriceCurrency":"PLN",
-#    "Mileage":"117500",
-#    "ProductionYear":"2015",
-#    "FuelType":"petrol",
-#    "Transmision":"automatic",
-#    "HorsePower":"190",
-#    "Capacity":"1984"
-# },
