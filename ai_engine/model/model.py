@@ -4192,17 +4192,6 @@ def train_model(resolved_data: List[dict], seed_data: dict) -> PriceRecommendati
    return PriceRecommendationResponse(RecommendedPrice=prediction[0], RecommendedPriceCurrency="PLN", RecommendedPriceLowest=7000, RecommendedPriceHighest=15000, ProcessedAds=len(resolved_data))
 
 
-
-def train_model(seed_data: List[dict]):
-   copy, data_frame = transform_data(seed_data, return_copy=True)
-   X, y = data_frame.drop('Price', axis=1), data_frame['Price']
-   X_train, _, y_train, _ = train_test_split(X, y, test_size=0.2)
-   req = LinearRegression()
-   req.fit(X_train, y_train)
-   prediction_data = _fill_missing_features(transform_data([predict_data]), pd.get_dummies(data_frame), copy)
-   print(prediction_data)
-   print(req.score)
-
 def convert_to_numeric(df: pd.DataFrame) -> pd.DataFrame:
    columns_to_transform = ['Price', 'Mileage', 'ProductionYear', 'HorsePower', 'Capacity']
    dropped: list = []
@@ -4215,7 +4204,11 @@ def convert_to_numeric(df: pd.DataFrame) -> pd.DataFrame:
    return df.dropna(subset=dropped)
 
 def drop_not_needed(df: pd.DataFrame) -> pd.DataFrame:
-   return df.drop(['PriceCurrency'], axis=1)
+   df = df.drop(['PriceCurrency'], axis=1)
+   df = df.drop("Thumbnails", axis=1)
+   df = df.drop("AdvertisementLink", axis=1)
+   df = df.drop("Source", axis=1)
+   return df
 
 def pre_process(df: pd.DataFrame) -> pd.DataFrame:
    # Transmision
