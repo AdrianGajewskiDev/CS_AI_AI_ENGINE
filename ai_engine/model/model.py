@@ -4182,74 +4182,63 @@ predict_data = {
 
 
 def train_model(resolved_data: List[dict], seed_data: dict) -> PriceRecommendationResponse:
-   return PriceRecommendationResponse(RecommendedPrice=10000, RecommendedPriceCurrency="PLN", RecommendedPriceLowest=7000, RecommendedPriceHighest=15000, ProcessedAds=416)
-   # copy, data_frame = transform_data(seed_data, return_copy=True)
-   # X, y = data_frame.drop('Price', axis=1), data_frame['Price']
-   # X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-   # req = LinearRegression()
-   # req.fit(X_train, y_train)
-   # prediction_data = _fill_missing_features(transform_data([predict_data]), pd.get_dummies(data_frame), copy)
-   # print(prediction_data)
-   # print(req.score)
+   copy, data_frame = transform_data(resolved_data, return_copy=True)
+   X, y = data_frame.drop('Price', axis=1), data_frame['Price']
+   X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+   req = LinearRegression()
+   req.fit(X_train, y_train)
+   prediction_data = _fill_missing_features(transform_data([seed_data]), pd.get_dummies(data_frame), copy)
+   prediction = req.predict(prediction_data)
+   return PriceRecommendationResponse(RecommendedPrice=prediction[0], RecommendedPriceCurrency="PLN", RecommendedPriceLowest=7000, RecommendedPriceHighest=15000, ProcessedAds=len(resolved_data))
 
-# def train_model(seed_data: List[dict]):
-#    copy, data_frame = transform_data(seed_data, return_copy=True)
-#    X, y = data_frame.drop('Price', axis=1), data_frame['Price']
-#    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-#    req = LinearRegression()
-#    req.fit(X_train, y_train)
-#    prediction_data = _fill_missing_features(transform_data([predict_data]), pd.get_dummies(data_frame), copy)
-#    print(prediction_data)
-#    print(req.score)
 
-# def convert_to_numeric(df: pd.DataFrame) -> pd.DataFrame:
-#    columns_to_transform = ['Price', 'Mileage', 'ProductionYear', 'HorsePower', 'Capacity']
-#    dropped: list = []
-#    for column in columns_to_transform:
-#       if column not in df.columns:
-#          continue
-#       df[column] = df[column].astype(int)
-#       dropped.append(column)
 
-#    return df.dropna(subset=dropped)
+def train_model(seed_data: List[dict]):
+   copy, data_frame = transform_data(seed_data, return_copy=True)
+   X, y = data_frame.drop('Price', axis=1), data_frame['Price']
+   X_train, _, y_train, _ = train_test_split(X, y, test_size=0.2)
+   req = LinearRegression()
+   req.fit(X_train, y_train)
+   prediction_data = _fill_missing_features(transform_data([predict_data]), pd.get_dummies(data_frame), copy)
+   print(prediction_data)
+   print(req.score)
 
-# def drop_not_needed(df: pd.DataFrame) -> pd.DataFrame:
-#    return df.drop(['PriceCurrency'], axis=1)
+def convert_to_numeric(df: pd.DataFrame) -> pd.DataFrame:
+   columns_to_transform = ['Price', 'Mileage', 'ProductionYear', 'HorsePower', 'Capacity']
+   dropped: list = []
+   for column in columns_to_transform:
+      if column not in df.columns:
+         continue
+      df[column] = df[column].astype(int)
+      dropped.append(column)
 
-# def pre_process(df: pd.DataFrame) -> pd.DataFrame:
-#    # Transmision
-#    df["Transmision"] = df["Transmision"].apply(lambda x: 1 if x == "automatic" else 0)
-#    df = df.join(pd.get_dummies(df.FuelType, dtype=int, prefix="FuelType")).drop("FuelType", axis=1)
+   return df.dropna(subset=dropped)
 
-#    # Mileage
-#    df['Mileage'] = preprocessing.normalize(np.array(df['Mileage']).reshape(-1, 1), axis=0)
+def drop_not_needed(df: pd.DataFrame) -> pd.DataFrame:
+   return df.drop(['PriceCurrency'], axis=1)
 
-#    # Capacity
-#    df['Capacity'] = preprocessing.normalize(np.array(df['Capacity']).reshape(-1, 1), axis=0)
+def pre_process(df: pd.DataFrame) -> pd.DataFrame:
+   # Transmision
+   df["Transmision"] = df["Transmision"].apply(lambda x: 1 if x == "automatic" else 0)
+   df = df.join(pd.get_dummies(df.FuelType, dtype=int, prefix="FuelType")).drop("FuelType", axis=1)
 
-#    # HorsePower
-#    df['HorsePower'] = preprocessing.normalize(np.array(df['HorsePower']).reshape(-1, 1), axis=0)
-#    return df
+   return df
 
-# def transform_data(seed_data: List[dict], return_copy: bool = False) -> pd.DataFrame:
-#    data_frame = pd.DataFrame(seed_data)
-#    copy = data_frame.copy()
-#    data_frame = drop_not_needed(data_frame)
-#    data_frame = convert_to_numeric(data_frame)
-#    data_frame = pre_process(data_frame)
+def transform_data(seed_data: List[dict], return_copy: bool = False) -> pd.DataFrame:
+   data_frame = pd.DataFrame(seed_data)
+   copy = data_frame.copy()
+   data_frame = drop_not_needed(data_frame)
+   data_frame = convert_to_numeric(data_frame)
+   data_frame = pre_process(data_frame)
    
-#    return data_frame if not return_copy else copy, data_frame
+   return data_frame if not return_copy else copy, data_frame
 
-# def _fill_missing_features(data: pd.DataFrame, data_frame: pd.DataFrame, original_data_frame: pd.DataFrame) -> pd.DataFrame:
-#    _data = data[0]
-#    missing_features = set(data_frame.columns) - set(_data.columns)
-#    for feature in missing_features:
-#       _data[feature] = 0
-
-#    pre_process_data_frame = original_data_frame._append({"Mileage": _data["Mileage"].values[0]}, ignore_index=True)
-#    numeric = convert_to_numeric(pre_process_data_frame)
-#    print("pre_process_data_frame",numeric)
-#    return _data
+def _fill_missing_features(data: pd.DataFrame, data_frame: pd.DataFrame, original_data_frame: pd.DataFrame) -> pd.DataFrame:
+   _data = data[0]
+   missing_features = set(data_frame.columns) - set(_data.columns)
+   for feature in missing_features:
+      _data[feature] = 0
+   return _data
 
 # train_model(data['content'])
 
