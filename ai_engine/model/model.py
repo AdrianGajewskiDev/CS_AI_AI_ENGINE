@@ -2,6 +2,7 @@ from typing import List
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
+from ai_engine.logging.logger import InternalLogger
 from ai_engine.models.response_models import PriceRecommendationResponse
 
 data = {
@@ -4205,8 +4206,9 @@ def convert_to_numeric(df: pd.DataFrame) -> pd.DataFrame:
 
 def drop_not_needed(df: pd.DataFrame, drop_y: bool = False) -> pd.DataFrame:
    columns_to_drop = ['PriceCurrency', 'AdvertisementLink', 'Source', 'Thumbnails', 'Generation', 'Make', 'Model']
-
+   InternalLogger.LogDebug(f"Dropping not needed columns, drop_y: {drop_y}")
    if drop_y:
+      InternalLogger.LogDebug("Dropping Price column")
       columns_to_drop.append('Price')
 
    for column in columns_to_drop:
