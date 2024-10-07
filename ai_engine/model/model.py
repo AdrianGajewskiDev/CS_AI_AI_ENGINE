@@ -4212,9 +4212,10 @@ def drop_not_needed(df: pd.DataFrame, drop_y: bool = False) -> pd.DataFrame:
       columns_to_drop.append('Price')
 
    for column in columns_to_drop:
+      InternalLogger.LogDebug(f"Dropping column: {column}")
       if column not in df.columns:
          continue
-      InternalLogger.LogDebug(f"Dropping column: {column}")
+      InternalLogger.LogDebug(f"Dropped column: {column}")
       df = df.drop(column, axis=1)
    return df
 
