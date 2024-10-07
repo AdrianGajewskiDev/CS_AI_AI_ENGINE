@@ -4187,7 +4187,7 @@ def train_model(resolved_data: List[dict], seed_data: dict) -> PriceRecommendati
    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
    req = LinearRegression()
    req.fit(X_train, y_train)
-   prediction_data = _fill_missing_features(transform_data([seed_data]), pd.get_dummies(data_frame))
+   prediction_data = _fill_missing_features(transform_data([seed_data], True), pd.get_dummies(data_frame))
    prediction = req.predict(prediction_data)
    return PriceRecommendationResponse(RecommendedPrice=prediction[0], RecommendedPriceCurrency="PLN", RecommendedPriceLowest=7000, RecommendedPriceHighest=15000, ProcessedAds=len(resolved_data))
 
@@ -4203,8 +4203,12 @@ def convert_to_numeric(df: pd.DataFrame) -> pd.DataFrame:
 
    return df.dropna(subset=dropped)
 
-def drop_not_needed(df: pd.DataFrame) -> pd.DataFrame:
+def drop_not_needed(df: pd.DataFrame, drop_y: bool = False) -> pd.DataFrame:
    columns_to_drop = ['PriceCurrency', 'AdvertisementLink', 'Source', 'Thumbnails', 'Generation', 'Make', 'Model']
+
+   if drop_y:
+      columns_to_drop.append('Price')
+
    for column in columns_to_drop:
       if column not in df.columns:
          continue
@@ -4218,9 +4222,9 @@ def pre_process(df: pd.DataFrame) -> pd.DataFrame:
 
    return df
 
-def transform_data(seed_data: List[dict]) -> pd.DataFrame:
+def transform_data(seed_data: List[dict], drop_y: bool = False) -> pd.DataFrame:
    data_frame = pd.DataFrame(seed_data)
-   data_frame = drop_not_needed(data_frame)
+   data_frame = drop_not_needed(data_frame, drop_y)
    data_frame = convert_to_numeric(data_frame)
    data_frame = pre_process(data_frame)
    
