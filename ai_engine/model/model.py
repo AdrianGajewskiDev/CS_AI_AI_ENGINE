@@ -11,7 +11,7 @@ def predict_price(data: List[dict], seed_data: dict) -> PriceRecommendationRespo
    _lowest: list = []
    _average: list = []
    _highest: list = []
-   for i in range(50):
+   for i in range(25):
       print(f"Predicting price {i}")
       lowest, average, highest = get_predictions(data, seed_data)
       _lowest.append(lowest)
@@ -28,7 +28,7 @@ def predict_price(data: List[dict], seed_data: dict) -> PriceRecommendationRespo
 def get_predictions(resolved_data: List[dict], seed_data: dict) -> List[PriceRecommendationResponse]:
    predicted_prices = []
 
-   for i in range(59):
+   for i in range(25):
       predicted_prices.append(get_predicted_price(resolved_data, seed_data))
 
    return _analyze_prices(predicted_prices)
