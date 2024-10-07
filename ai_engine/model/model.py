@@ -4204,7 +4204,7 @@ def convert_to_numeric(df: pd.DataFrame) -> pd.DataFrame:
    return df.dropna(subset=dropped)
 
 def drop_not_needed(df: pd.DataFrame) -> pd.DataFrame:
-   columns_to_drop = ['PriceCurrency', 'AdvertisementLink', 'Source', 'Thumbnails']
+   columns_to_drop = ['PriceCurrency', 'AdvertisementLink', 'Source', 'Thumbnails', 'Generation', 'Make', 'Model']
    for column in columns_to_drop:
       if column not in df.columns:
          continue
