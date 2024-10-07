@@ -4227,8 +4227,7 @@ def transform_data(seed_data: List[dict]) -> pd.DataFrame:
    return data_frame
 
 def _fill_missing_features(data: pd.DataFrame, data_frame: pd.DataFrame) -> pd.DataFrame:
-   _data = data[0]
-   missing_features = set(data_frame.columns) - set(_data.columns)
+   missing_features = set(data_frame.columns) - set(data.columns)
    for feature in missing_features:
-      _data[feature] = 0
-   return _data
+      data[feature] = 0
+   return data
