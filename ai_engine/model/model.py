@@ -4204,10 +4204,11 @@ def convert_to_numeric(df: pd.DataFrame) -> pd.DataFrame:
    return df.dropna(subset=dropped)
 
 def drop_not_needed(df: pd.DataFrame) -> pd.DataFrame:
-   df = df.drop(['PriceCurrency'], axis=1)
-   df = df.drop("Thumbnails", axis=1)
-   df = df.drop("AdvertisementLink", axis=1)
-   df = df.drop("Source", axis=1)
+   columns_to_drop = ['Price', 'Mileage', 'ProductionYear', 'HorsePower', 'Capacity']
+   for column in columns_to_drop:
+      if column not in df.columns:
+         continue
+      df[column] = df.drop(column, axis=1)
    return df
 
 def pre_process(df: pd.DataFrame) -> pd.DataFrame:
