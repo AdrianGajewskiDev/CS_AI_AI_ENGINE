@@ -6,7 +6,7 @@ from typing import List
 from ai_engine.dynamo_db.dynamo_db import get_task_seed_data, update_task_status
 from ai_engine.helpers.extract_data import extract_data_from_event
 from ai_engine.logging.logger import InternalLogger
-from ai_engine.model.model import train_model
+from ai_engine.model.model import predict_price
 from ai_engine.related.get_most_related import get_most_related
 from ai_engine.s3.s3 import upload_recommendation_results
 from ai_engine.utils.combine_results import combine_results
@@ -31,7 +31,7 @@ def startup_engine(event: dict) -> int:
     
     InternalLogger.LogDebug('Training model')
     
-    price = train_model(resolved_data, seed_data)
+    price = predict_price(resolved_data, seed_data)
     
     InternalLogger.LogDebug('Getting most related')
     
