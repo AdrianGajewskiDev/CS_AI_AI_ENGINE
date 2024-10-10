@@ -211,7 +211,7 @@ def predict_price(data: List[dict], seed_data: dict) -> PriceRecommendationRespo
 def get_predictions(resolved_data: List[dict], seed_data: dict) -> List[PriceRecommendationResponse]:
    predicted_prices = []
 
-   for i in range(1):
+   for i in range(10):
       prediction = get_predicted_price(resolved_data, seed_data)
       if prediction < 0:
          continue
