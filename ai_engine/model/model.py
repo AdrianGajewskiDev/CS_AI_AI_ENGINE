@@ -205,7 +205,7 @@ def predict_price(data: List[dict], seed_data: dict) -> PriceRecommendationRespo
    average = math.floor(sum(_average) / len(_average))
    highest = math.floor(sum(_highest) / len(_highest))
    print(f"Lowest: {lowest}, Average: {average}, Highest: {highest}")
-   return PriceRecommendationResponse(RecommendedPrice=average, RecommendedPriceCurrency="PLN", RecommendedPriceLowest=lowest, RecommendedPriceHighest=highest, ProcessedAds=len(data))
+   return PriceRecommendationResponse(RecommendedPrice=roundup(average), RecommendedPriceCurrency="PLN", RecommendedPriceLowest=roundup(lowest), RecommendedPriceHighest=roundup(highest), ProcessedAds=len(data))
 
 
 def get_predictions(resolved_data: List[dict], seed_data: dict) -> List[PriceRecommendationResponse]:
@@ -304,3 +304,6 @@ def sort_data_frame_columns(data: pd.DataFrame) -> pd.DataFrame:
 def _analyze_prices(prices: List[int]):
    prices = [x for x in prices]
    return min(prices), math.floor(sum(prices) / len(prices)), max(prices)
+
+def roundup(x: float | int) -> int:
+   return int(math.ceil(x / 100.0)) * 100
