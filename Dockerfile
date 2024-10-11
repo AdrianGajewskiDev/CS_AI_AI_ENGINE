@@ -1,4 +1,4 @@
-FROM python:3.12.4-alpine
+FROM python:3.12-slim
 WORKDIR ${LAMBDA_TASK_ROOT}
 
 COPY ./ai_engine ${LAMBDA_TASK_ROOT}/ai_engine
