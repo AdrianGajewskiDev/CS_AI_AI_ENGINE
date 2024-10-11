@@ -12,7 +12,7 @@ if __name__ == '__main__':
     args = sys.argv
 
     if len(args) == 2:
-        task_id = args[2]
+        task_id = args[1]
         batch_handler(task_id)
     
     raise Exception('Invalid arguments')
