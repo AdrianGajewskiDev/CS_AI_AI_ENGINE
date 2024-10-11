@@ -71,7 +71,7 @@ def _extract_task_id(message) -> str:
     if not message:
         InternalLogger.LogError('No message found in the record')
         raise
-
+    InternalLogger.LogDebug(f'Extracting task_id from message: {message}')
     try:
         message = json.loads(message)
     except json.JSONDecodeError as e:
