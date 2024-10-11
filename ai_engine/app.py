@@ -13,6 +13,6 @@ if __name__ == '__main__':
 
     if len(args) == 2:
         task_id = args[1]
-        batch_handler(task_id)
+        batch_handler("172cd7b5-0e6e-4c66-bdcd-f7b9967c9201")
     
     raise Exception('Invalid arguments')
