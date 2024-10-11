@@ -1,4 +1,4 @@
-FROM public.ecr.aws/lambda/python:3.12
+FROM python:3.12.4-alpine
 WORKDIR ${LAMBDA_TASK_ROOT}
 
 COPY ./ai_engine ${LAMBDA_TASK_ROOT}/ai_engine
@@ -10,6 +10,5 @@ RUN pip install poetry
 
 RUN poetry config virtualenvs.create false
 RUN poetry install --no-dev
-
 
 CMD ["ai_engine.app.handler"]
