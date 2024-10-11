@@ -13,7 +13,7 @@ from ai_engine.utils.combine_results import combine_results
 
 RESOLVERS = os.getenv('RESOLVER_NAMES')
 
-def startup_engine(event: dict) -> int:
+def startup_engine(event: dict | str) -> int:
     InternalLogger.LogDebug('Starting engine')
 
     task_id, resolved_data = extract_data_from_event(event)

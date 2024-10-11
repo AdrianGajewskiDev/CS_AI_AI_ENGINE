@@ -8,20 +8,23 @@ from ai_engine.seed_data.s3_data_puller import S3DataPuller
 
 RESOLVERS = os.getenv('RESOLVER_NAMES')
 
-def extract_data_from_event(event: dict):
-    records = event.get('Records')
-    if not records:
+def extract_data_from_event(event: dict | str):
+    records = event.get('Records') if isinstance(event, dict) else event
+    if not records and isinstance(event, dict):
         InternalLogger.LogError('No records found in the event')
         return None, None
     
     # sns always sends a single record
-    return _process_record(records[0])
+    return _process_record(records[0] if isinstance(records, list) else event)
 
 
-def _process_record(record: dict) -> None:
-    sns = record.get('Sns', {})
-    message = sns.get('Message')
-    task_id = _extract_task_id(message)
+def _process_record(record: dict | str) -> None:
+    if isinstance(record, dict):
+        sns = record.get('Sns', {})
+        message = sns.get('Message')
+        task_id = _extract_task_id(message)
+    else:
+        task_id = record
 
     if not task_id:
         InternalLogger.LogError('No task_id found in the message')
