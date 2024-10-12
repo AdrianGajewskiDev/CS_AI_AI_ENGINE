@@ -191,7 +191,7 @@ from ai_engine.models.response_models import PriceRecommendationResponse
 # seed_data = {'Make': 'Audi', 'Model': '100', 'Generation': '', 'ProductionYear': 1991, 'Mileage': 235695, 'Capacity': 2771, 'HorsePower': 150, 'FuelType': 'petrol', 'Transmision': 'manual'}
 
 
-NUMBER_OF_PREDICTIONS = os.getenv("NUMBER_OF_PREDICTIONS", 5)
+NUMBER_OF_PREDICTIONS = int(os.getenv("NUMBER_OF_PREDICTIONS", 5))
 
 def predict_price(data: List[dict], seed_data: dict) -> PriceRecommendationResponse:
    predicted_prices = []
