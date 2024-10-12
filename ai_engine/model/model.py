@@ -194,33 +194,21 @@ from ai_engine.models.response_models import PriceRecommendationResponse
 NUMBER_OF_PREDICTIONS = os.getenv("NUMBER_OF_PREDICTIONS", 5)
 
 def predict_price(data: List[dict], seed_data: dict) -> PriceRecommendationResponse:
-   _lowest: list = []
-   _average: list = []
-   _highest: list = []
+   predicted_prices = []
    for i in range(1):
       print(f"Predicting price {i}")
-      lowest, average, highest = get_predictions(data, seed_data)
-      _lowest.append(lowest)
-      _average.append(average)
-      _highest.append(highest)
+      _predicted_prize = get_predictions(data, seed_data)
+      print(f"Predicted price: {_predicted_prize}")
+      predicted_prices.append(_predicted_prize)
 
-   lowest = math.floor(sum(_lowest) / len(_lowest))
-   average = math.floor(sum(_average) / len(_average))
-   highest = math.floor(sum(_highest) / len(_highest))
+   lowest, average, highest = _analyze_prices(predicted_prices)
+  
    print(f"Lowest: {lowest}, Average: {average}, Highest: {highest}")
    return PriceRecommendationResponse(RecommendedPrice=roundup(average), RecommendedPriceCurrency="PLN", RecommendedPriceLowest=roundup(lowest), RecommendedPriceHighest=roundup(highest), ProcessedAds=len(data))
 
 
 def get_predictions(resolved_data: List[dict], seed_data: dict) -> List[PriceRecommendationResponse]:
-   predicted_prices = []
-
-   for i in range(NUMBER_OF_PREDICTIONS):
-      prediction = get_predicted_price(resolved_data, seed_data)
-      if prediction < 0:
-         continue
-      predicted_prices.append(prediction)
-   print(predicted_prices)
-   return _analyze_prices(predicted_prices)
+   return get_predicted_price(resolved_data, seed_data)
 
 def get_predicted_price(resolved_data: List[dict], seed_data: dict) -> float:
    resolved_data = _transform_order(resolved_data)
