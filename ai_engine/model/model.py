@@ -195,7 +195,7 @@ NUMBER_OF_PREDICTIONS = int(os.getenv("NUMBER_OF_PREDICTIONS", 5))
 
 def predict_price(data: List[dict], seed_data: dict) -> PriceRecommendationResponse:
    predicted_prices = []
-   for i in range(1):
+   for i in range(NUMBER_OF_PREDICTIONS):
       print(f"Predicting price {i}")
       _predicted_prize = get_predictions(data, seed_data)
       print(f"Predicted price: {_predicted_prize}")
