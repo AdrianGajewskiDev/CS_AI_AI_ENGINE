@@ -1,5 +1,6 @@
 from ast import Tuple
 import math
+import os
 from typing import List
 import pandas as pd
 from sklearn.linear_model import LinearRegression
@@ -190,6 +191,8 @@ from ai_engine.models.response_models import PriceRecommendationResponse
 # seed_data = {'Make': 'Audi', 'Model': '100', 'Generation': '', 'ProductionYear': 1991, 'Mileage': 235695, 'Capacity': 2771, 'HorsePower': 150, 'FuelType': 'petrol', 'Transmision': 'manual'}
 
 
+NUMBER_OF_PREDICTIONS = os.getenv("NUMBER_OF_PREDICTIONS", 5)
+
 def predict_price(data: List[dict], seed_data: dict) -> PriceRecommendationResponse:
    _lowest: list = []
    _average: list = []
@@ -211,7 +214,7 @@ def predict_price(data: List[dict], seed_data: dict) -> PriceRecommendationRespo
 def get_predictions(resolved_data: List[dict], seed_data: dict) -> List[PriceRecommendationResponse]:
    predicted_prices = []
 
-   for i in range(5):
+   for i in range(NUMBER_OF_PREDICTIONS):
       prediction = get_predicted_price(resolved_data, seed_data)
       if prediction < 0:
          continue
