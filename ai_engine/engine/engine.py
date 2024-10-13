@@ -9,6 +9,7 @@ from ai_engine.logging.logger import InternalLogger
 from ai_engine.model.model import predict_price
 from ai_engine.related.get_most_related import get_most_related
 from ai_engine.s3.s3 import upload_recommendation_results
+from ai_engine.sns.sns import publish_to_sns
 from ai_engine.utils.combine_results import combine_results
 
 RESOLVERS = os.getenv('RESOLVER_NAMES')
@@ -48,4 +49,6 @@ def startup_engine(event: dict | str) -> int:
     InternalLogger.LogDebug('Updating task status')
 
     update_task_status(task_id=task_id, status='COMPLETED')
+
+    publish_to_sns(task_id)
     return 0
