@@ -5,7 +5,7 @@ from typing import List
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
-from ai_engine.logging.logger import InternalLogger
+from cs_ai_common.logging.internal_logger import InternalLogger
 from ai_engine.models.response_models import PriceRecommendationResponse
 from sklearn.preprocessing import StandardScaler
 

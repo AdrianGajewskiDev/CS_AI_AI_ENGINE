@@ -2,7 +2,7 @@ import json
 import os
 import boto3
 
-from ai_engine.logging.logger import InternalLogger
+from cs_ai_common.logging.internal_logger import InternalLogger
 
 SNS_TOPIC_ARN = os.getenv('SNS_TOPIC_ARN')
 

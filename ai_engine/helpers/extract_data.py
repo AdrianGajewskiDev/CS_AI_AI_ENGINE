@@ -2,7 +2,7 @@ import ast
 import json
 import os
 from typing import List
-from ai_engine.logging.logger import InternalLogger
+from cs_ai_common.logging.internal_logger import InternalLogger
 from ai_engine.seed_data.puller import SeedDataPuller
 from ai_engine.seed_data.s3_data_puller import S3DataPuller
 

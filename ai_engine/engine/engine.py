@@ -5,12 +5,12 @@ from typing import List
 
 from ai_engine.dynamo_db.dynamo_db import get_task_seed_data, update_task_status
 from ai_engine.helpers.extract_data import extract_data_from_event
-from ai_engine.logging.logger import InternalLogger
 from ai_engine.model.model import predict_price
 from ai_engine.related.get_most_related import get_most_related
 from ai_engine.s3.s3 import upload_recommendation_results
 from ai_engine.sns.sns import publish_to_sns
 from ai_engine.utils.combine_results import combine_results
+from cs_ai_common.logging.internal_logger import InternalLogger
 
 RESOLVERS = os.getenv('RESOLVER_NAMES')
 

@@ -1,7 +1,7 @@
 import json
 import math
 from typing import List
-from ai_engine.logging.logger import InternalLogger
+from cs_ai_common.logging.internal_logger import InternalLogger
 from ai_engine.models.response_models import RelatedAdsResponse
 from ai_engine.models.shared import AdItem
 

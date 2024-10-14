@@ -8,14 +8,15 @@ packages = [{include = "ai_engine"}]
 
 [tool.poetry.dependencies]
 python = "^3.12"
-pydantic = "^1.5.1"
+pydantic = "^2.9.0"
 requests = "2.32.3"
 numpy = "2.1.1"
 pandas = "2.2.2"
 matplotlib = "3.9.2"
 seaborn = "0.13.2"
 scikit-learn = "1.5.1"
-boto3="1.35.38"
+boto3="1.35.39"
+cs-ai-common = "^0.1.7"
 
 [tool.poetry.dev-dependencies]
 black = "^23.1.0"
