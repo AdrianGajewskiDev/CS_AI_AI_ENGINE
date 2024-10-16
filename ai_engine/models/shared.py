@@ -13,4 +13,4 @@ class AdItem(BaseModel):
     Capacity: Optional[str] = None
     AdvertisementLink: Optional[str] = None
     Thumbnails: Optional[List[str]] = None
-    Source: str = "https://www.otomoto.pl"
+    Source: Optional[str] = None

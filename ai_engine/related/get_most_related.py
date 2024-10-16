@@ -628,7 +628,8 @@ def build_ad_item(item: dict) -> AdItem:
         HorsePower=item["HorsePower"],
         Capacity=item["Capacity"],
         AdvertisementLink=item["AdvertisementLink"],
-        Thumbnails=item["Thumbnails"]
+        Thumbnails=item["Thumbnails"],
+        Source=item["Source"]
     )
 
 def get_portion_length(total_ads: int) -> int:
