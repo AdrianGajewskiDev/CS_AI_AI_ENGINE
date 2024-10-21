@@ -34,17 +34,7 @@ def startup_engine(event: dict | str) -> int:
     
     price = predict_price(resolved_data, seed_data)
     
-    InternalLogger.LogDebug('Getting most related')
-    
-    most_related = get_most_related(resolved_data, seed_data)
-    
-    InternalLogger.LogDebug('Combining results')
-    
-    result = combine_results(price, most_related)
-    
-    InternalLogger.LogDebug('Uploading results')
-    
-    upload_recommendation_results(json.dumps(result), task_id)
+    upload_recommendation_results(json.dumps(price.dict()), task_id)
 
     InternalLogger.LogDebug('Updating task status')
 
